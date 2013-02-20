@@ -1,0 +1,22 @@
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/fe.h.orig	2009-07-09 11:15:40.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/fe.h	2013-02-20 17:25:54.537266158 +0100
+@@ -1302,7 +1302,7 @@
+    {
+    protected:
+       // Algorithm instance
+-      mutable FE &fe;                                                                 
++      FE &fe;                                                                 
+       const U32 width;   
+       const S32 s1Step, s2Step, s3Step,s4Step; 
+       const S32 d1Step,d2Step,d3Step,d4Step;
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/fex.h.orig	2009-07-09 11:15:40.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/fex.h	2013-02-20 17:34:16.300578433 +0100
+@@ -119,7 +119,7 @@
+    class B0St
+    {
+    protected:
+-      mutable FE &fe;                                               // Algorithm instance
++      FE &fe;                                               // Algorithm instance
+       const U32 width;   
+       const S32 s1Step, s2Step, s3Step,s4Step; 
+       U32 threads;   

@@ -1,0 +1,31 @@
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwBase/fwBase.sconscript.orig	2009-07-09 11:15:36.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwBase/fwBase.sconscript	2013-02-20 16:19:45.120766072 +0100
+@@ -17,26 +17,11 @@
+ # Setup the path to the constatnts source file
+ pthConstCPP  = join(oRoot.dctFwVars['pthProjectRoot'], 'common', 'src', 'Constants.cpp')
+ 
+-if oRoot.dctFwVars['thread'] == 'pthread' :
+-	pthBoostBase = join(oRoot.dctFwVars['pthProjectRoot'], '..', 'sdk', 'boost_1_34_0', 'libs', 'thread', 'src')
+-	lstExtraBaseCPPs = [     pthConstCPP ,
+-		join(pthBoostBase,'barrier.cpp'),       \
+-		join(pthBoostBase,'condition.cpp'),     \
+-		join(pthBoostBase,'exceptions.cpp'),    \
+-		join(pthBoostBase,'mutex.cpp'),         \
+-		join(pthBoostBase,'once.cpp'),          \
+-		join(pthBoostBase,'thread.cpp'),        \
+-		join(pthBoostBase,'tss_dll.cpp'),       \
+-		join(pthBoostBase,'tss_hooks.cpp'),     \
+-		join(pthBoostBase,'tss_pe.cpp'),        \
+-		join(pthBoostBase,'xtime.cpp')          ]
+-else:
+-	lstExtraBaseCPPs = [ pthConstCPP ]
++lstExtraBaseCPPs = [ pthConstCPP ]
+ 
+ # Project script essentially starts here
+-fwBase      = fwProject(oRoot, 'fwBase')
++fwBase      = fwProject(oRoot, 'fwBase', LIBS=['boost_thread', 'boost_system'])
+ 
+-setupIncludePaths(fwBase.oEnv, join('sdk', 'boost_1_34_0'), dontRecurse=1)
+ oLib_fwBase = fwBase.initBuildObjects(lstExtraCPPs=lstExtraBaseCPPs)
+ 
+ Return("oLib_fwBase")
