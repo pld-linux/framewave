@@ -20,3 +20,1405 @@
        const U32 width;   
        const S32 s1Step, s2Step, s3Step,s4Step; 
        U32 threads;   
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/Filter_ProcessorTemplates.h.orig	2009-07-09 11:15:30.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/Filter_ProcessorTemplates.h	2013-02-22 15:24:57.545866926 +0100
+@@ -52,7 +52,7 @@
+                 while( pDstElement < pLineEnd )
+                 {
+                     // perform the pixel calculations
+-                    Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi::Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep );
+                     pSrcElement++;
+                     pDstElement++;
+                 }
+@@ -101,9 +101,9 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep );
+-                    Calculate( pSrcElement+1, pData->srcStep, pDstElement+1, pData->dstStep );
+-                    Calculate( pSrcElement+2, pData->srcStep, pDstElement+2, pData->dstStep );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi::Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi::Calculate( pSrcElement+1, pData->srcStep, pDstElement+1, pData->dstStep );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi::Calculate( pSrcElement+2, pData->srcStep, pDstElement+2, pData->dstStep );
+                     pSrcElement += 4;
+                     pDstElement += 4;
+                 }
+@@ -151,7 +151,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
+                     pSrcElement++;
+                     pDstElement++;
+                 }
+@@ -200,9 +200,9 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
+-                    Calculate( pSrcElement+1, pData->srcStep, pDstElement+1, pData->dstStep, pData->maskSize, pData->anchor );
+-                    Calculate( pSrcElement+2, pData->srcStep, pDstElement+2, pData->dstStep, pData->maskSize, pData->anchor );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement+1, pData->srcStep, pDstElement+1, pData->dstStep, pData->maskSize, pData->anchor );
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement+2, pData->srcStep, pDstElement+2, pData->dstStep, pData->maskSize, pData->anchor );
+                     pSrcElement += 4;
+                     pDstElement += 4;
+                 }
+@@ -250,7 +250,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor_divisor::Calculate( pSrcElement, pData->srcStep, 
+                                pDstElement, pData->dstStep, 
+                                (const Fw32s *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor, pData->divisor );
+@@ -302,15 +302,15 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor_divisor::Calculate( pSrcElement, pData->srcStep, 
+                                pDstElement, pData->dstStep, 
+                                (const Fw32s *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor, pData->divisor );
+-                    Calculate( pSrcElement+1, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor_divisor::Calculate( pSrcElement+1, pData->srcStep, 
+                                pDstElement+1, pData->dstStep, 
+                                (const Fw32s *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor, pData->divisor );
+-                    Calculate( pSrcElement+2, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor_divisor::Calculate( pSrcElement+2, pData->srcStep, 
+                                pDstElement+2, pData->dstStep, 
+                                (const Fw32s *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor, pData->divisor );
+@@ -361,7 +361,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor::Calculate( pSrcElement, pData->srcStep, 
+                                pDstElement, pData->dstStep, 
+                                (const Fw32f *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor );
+@@ -413,15 +413,15 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor::Calculate( pSrcElement, pData->srcStep, 
+                                pDstElement, pData->dstStep, 
+                                (const Fw32f *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor );
+-                    Calculate( pSrcElement+1, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor::Calculate( pSrcElement+1, pData->srcStep, 
+                                pDstElement+1, pData->dstStep, 
+                                (const Fw32f *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor );
+-                    Calculate( pSrcElement+2, pData->srcStep, 
++                    TProcessor_pSrc_sStep_pDst_dStep_roi_kernel_size_anchor::Calculate( pSrcElement+2, pData->srcStep, 
+                                pDstElement+2, pData->dstStep, 
+                                (const Fw32f *)pData->pKernel, pData->kernelSize, 
+                                pData->anchor );
+@@ -471,7 +471,7 @@
+                 DstType *pLineEnd = pDstElement + pData->dstRoiSize.width * chCount;
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
++                    TProcessorWithBuffer_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
+                     pSrcElement++;
+                     pDstElement++;
+                 }
+@@ -520,9 +520,9 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
+-                    Calculate( pSrcElement+1, pData->srcStep, pDstElement+1, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
+-                    Calculate( pSrcElement+2, pData->srcStep, pDstElement+2, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
++                    TProcessorWithBuffer_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
++                    TProcessorWithBuffer_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement+1, pData->srcStep, pDstElement+1, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
++                    TProcessorWithBuffer_pSrc_sStep_pDst_dStep_roi_mask_anchor::Calculate( pSrcElement+2, pData->srcStep, pDstElement+2, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
+                     *(pDstElement+3) = *(pSrcElement+3);
+                     pSrcElement += 4;
+                     pDstElement += 4;
+@@ -571,7 +571,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
++                    TProcessorAllChannels_pSrc_sStep_pDst_dStep_roi_mask_anchor::CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
+                     pSrcElement += chCount;
+                     pDstElement += chCount;
+                 }
+@@ -620,7 +620,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
++                    TProcessorAllChannels_pSrc_sStep_pDst_dStep_roi_mask_anchor::CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor );
+                     pSrcElement += 4;
+                     pDstElement += 4;
+                 }
+@@ -668,7 +668,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
++                    TProcessorAllChannelsWithBuffer_pSrc_sStep_pDst_dStep_roi_mask_anchor::CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
+                     pSrcElement += chCount;
+                     pDstElement += chCount;
+                 }
+@@ -717,7 +717,7 @@
+                 // iterate through the destination data from left to right
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
++                    TProcessorAllChannelsWithBuffer_pSrc_sStep_pDst_dStep_roi_mask_anchor::CalculateAllChannels( pSrcElement, pData->srcStep, pDstElement, pData->dstStep, pData->maskSize, pData->anchor, pData->pBufferObj );
+                     pSrcElement += 4;
+                     pDstElement += 4;
+                 }
+@@ -773,7 +773,7 @@
+                 DstType * pDstElement = pDst;
+                 for( int col = 0; col < pData->dstRoiSize.width * chCount; col++ )
+                 {
+-                    Calculate( borderBufferObj, col, pDstElement, pData->maskSize, pData->anchor );
++                    TProcessor_WithBorder_pSrc_sStep_pDst_dStep_roi_mask_anchor_buffer::Calculate( borderBufferObj, col, pDstElement, pData->maskSize, pData->anchor );
+                     pDstElement++;
+                 }
+                 pDst = FW_REF::Offset(pDst, pData->dstStep);
+@@ -820,9 +820,9 @@
+                 DstType * pDstElement = pDst;
+                 for( int col = 0; col < pData->dstRoiSize.width * AC4; )
+                 {
+-                    Calculate( borderBufferObj, col, pDstElement, pData->maskSize, pData->anchor );
+-                    Calculate( borderBufferObj, col+1, pDstElement+1, pData->maskSize, pData->anchor );
+-                    Calculate( borderBufferObj, col+2, pDstElement+2, pData->maskSize, pData->anchor );
++                    TProcessor_WithBorder_pSrc_sStep_pDst_dStep_roi_mask_anchor_buffer::Calculate( borderBufferObj, col, pDstElement, pData->maskSize, pData->anchor );
++                    TProcessor_WithBorder_pSrc_sStep_pDst_dStep_roi_mask_anchor_buffer::Calculate( borderBufferObj, col+1, pDstElement+1, pData->maskSize, pData->anchor );
++                    TProcessor_WithBorder_pSrc_sStep_pDst_dStep_roi_mask_anchor_buffer::Calculate( borderBufferObj, col+2, pDstElement+2, pData->maskSize, pData->anchor );
+                     pDstElement+=4;
+                     col+=4;
+                 }
+@@ -901,7 +901,7 @@
+             {
+                 // at the beginning of each row start by calling the generic Calculate method that does
+                 // not reuse any previous calculations
+-                Calculate(  pSrc, pData->srcStep,
++                TProcessor_ZigZagRDRD::Calculate(  pSrc, pData->srcStep,
+                             pDst, pData->dstStep,
+                             pData->maskSize, 
+                             pData->anchor,
+@@ -915,7 +915,7 @@
+                 DstType *pLineEnd = pDst + pData->dstRoiSize.width * chCount;
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateRight(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagRDRD::CalculateRight(  pSrcElement, pData->srcStep,
+                                      pDstElement, pData->dstStep,
+                                      pData->maskSize, 
+                                      pData->anchor,
+@@ -963,7 +963,7 @@
+             {
+                 // at the beginning of each row start by calling the generic Calculate method that does
+                 // not reuse any previous calculations
+-                Calculate(  pSrc, pData->srcStep,
++                TProcessor_ZigZagRDRD::Calculate(  pSrc, pData->srcStep,
+                             pDst, pData->dstStep,
+                             pData->maskSize, 
+                             pData->anchor,
+@@ -977,7 +977,7 @@
+                 DstType *pLineEnd = pDst + pData->dstRoiSize.width * C4;
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateRight(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagRDRD::CalculateRight(  pSrcElement, pData->srcStep,
+                                      pDstElement, pData->dstStep,
+                                      pData->maskSize, 
+                                      pData->anchor,
+@@ -1038,7 +1038,7 @@
+             while( pDst < pEndDst )
+             {
+                 // at the top of each column call the generic Calculate method
+-                Calculate(  pSrc, pData->srcStep,
++                TProcessor_ZigZagDRDR::Calculate(  pSrc, pData->srcStep,
+                             pDst, pData->dstStep,
+                             pData->maskSize, 
+                             pData->anchor,
+@@ -1052,7 +1052,7 @@
+                 DstType *pColumnEnd = FW_REF::Offset( pDst, pData->dstRoiSize.height * pData->dstStep );
+                 while( pDstElement < pColumnEnd )
+                 {
+-                    CalculateDown(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagDRDR::CalculateDown(  pSrcElement, pData->srcStep,
+                                     pDstElement, pData->dstStep,
+                                     pData->maskSize, 
+                                     pData->anchor,
+@@ -1100,7 +1100,7 @@
+             while( pDst < pEndDst )
+             {
+                 // at the top of each column call the generic Calculate method
+-                Calculate(  pSrc, pData->srcStep,
++                TProcessor_ZigZagDRDR::Calculate(  pSrc, pData->srcStep,
+                             pDst, pData->dstStep,
+                             pData->maskSize, 
+                             pData->anchor,
+@@ -1114,7 +1114,7 @@
+                 DstType *pColumnEnd = FW_REF::Offset( pDst, pData->dstRoiSize.height * pData->dstStep );
+                 while( pDstElement < pColumnEnd )
+                 {
+-                    CalculateDown(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagDRDR::CalculateDown(  pSrcElement, pData->srcStep,
+                                     pDstElement, pData->dstStep,
+                                     pData->maskSize, 
+                                     pData->anchor,
+@@ -1175,7 +1175,7 @@
+             DstType * pEndDst = FW_REF::Offset( pData->pDst, pData->dstRoiSize.height * pData->dstStep );
+ 
+             // start in the top left corner of the image
+-            Calculate(  pSrc, pData->srcStep,
++            TProcessor_ZigZagRDLD::Calculate(  pSrc, pData->srcStep,
+                         pDst, pData->dstStep,
+                         pData->maskSize, 
+                         pData->anchor,
+@@ -1193,7 +1193,7 @@
+                 DstType *pLineEnd = pDst + pData->dstRoiSize.width * chCount;
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateRight(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagRDLD::CalculateRight(  pSrcElement, pData->srcStep,
+                                      pDstElement, pData->dstStep,
+                                      pData->maskSize, 
+                                      pData->anchor,
+@@ -1208,7 +1208,7 @@
+                 if( pDstElement >= pEndDst )
+                     break;
+ 
+-                CalculateDown(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagRDLD::CalculateDown(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1226,7 +1226,7 @@
+ 
+                 while( pDstElement >= pDst )
+                 {
+-                    CalculateLeft(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagRDLD::CalculateLeft(  pSrcElement, pData->srcStep,
+                                      pDstElement, pData->dstStep,
+                                      pData->maskSize, 
+                                      pData->anchor,
+@@ -1244,7 +1244,7 @@
+                 if( pDst >= pEndDst )
+                     break;
+ 
+-                CalculateDown(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagRDLD::CalculateDown(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1282,7 +1282,7 @@
+             // calculate the pointer to the end of the destination data
+             DstType * pEndDst = FW_REF::Offset( pData->pDst, pData->dstRoiSize.height * pData->dstStep );
+ 
+-            Calculate(  pSrc, pData->srcStep,
++            TProcessor_ZigZagRDLD::Calculate(  pSrc, pData->srcStep,
+                         pDst, pData->dstStep,
+                         pData->maskSize, 
+                         pData->anchor,
+@@ -1295,7 +1295,7 @@
+                 DstType *pLineEnd = pDst + pData->dstRoiSize.width * C4;
+                 while( pDstElement < pLineEnd )
+                 {
+-                    CalculateRight(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagRDLD::CalculateRight(  pSrcElement, pData->srcStep,
+                                      pDstElement, pData->dstStep,
+                                      pData->maskSize, 
+                                      pData->anchor,
+@@ -1308,7 +1308,7 @@
+                 if( pDstElement >= pEndDst )
+                     break;
+ 
+-                CalculateDown(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagRDLD::CalculateDown(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1320,7 +1320,7 @@
+ 
+                 while( pDstElement >= pDst )
+                 {
+-                    CalculateLeft(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagRDLD::CalculateLeft(  pSrcElement, pData->srcStep,
+                                      pDstElement, pData->dstStep,
+                                      pData->maskSize, 
+                                      pData->anchor,
+@@ -1336,7 +1336,7 @@
+                 if( pDst >= pEndDst )
+                     break;
+ 
+-                CalculateDown(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagRDLD::CalculateDown(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1391,7 +1391,7 @@
+             DstType * pEndDst2 = FW_REF::Offset( pEndDst, (pData->dstRoiSize.height-1) * pData->dstStep );
+ 
+             // start in the top left corner
+-            Calculate(  pSrc, pData->srcStep,
++            TProcessor_ZigZagDRUR::Calculate(  pSrc, pData->srcStep,
+                         pDst, pData->dstStep,
+                         pData->maskSize, 
+                         pData->anchor,
+@@ -1407,7 +1407,7 @@
+                 DstType *pColumnEnd = FW_REF::Offset( pDst, pData->dstRoiSize.height * pData->dstStep );
+                 while( pDstElement < pColumnEnd )
+                 {
+-                    CalculateDown(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagDRUR::CalculateDown(  pSrcElement, pData->srcStep,
+                                     pDstElement, pData->dstStep,
+                                     pData->maskSize, 
+                                     pData->anchor,
+@@ -1421,7 +1421,7 @@
+                 if( pDstElement >= pEndDst2 )
+                     break;
+ 
+-                CalculateRight(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagDRUR::CalculateRight(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1436,7 +1436,7 @@
+ 
+                 while( pDstElement >= pDst )
+                 {
+-                    CalculateUp(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagDRUR::CalculateUp(  pSrcElement, pData->srcStep,
+                                   pDstElement, pData->dstStep,
+                                   pData->maskSize, 
+                                   pData->anchor,
+@@ -1453,7 +1453,7 @@
+                 if( pDst >= pEndDst )
+                     break;
+ 
+-                CalculateRight(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagDRUR::CalculateRight(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1493,7 +1493,7 @@
+             DstType * pEndDst2 = FW_REF::Offset( pEndDst, (pData->dstRoiSize.height-1) * pData->dstStep );
+ 
+             // start in the top left corner
+-            Calculate(  pSrc, pData->srcStep,
++            TProcessor_ZigZagDRUR::Calculate(  pSrc, pData->srcStep,
+                         pDst, pData->dstStep,
+                         pData->maskSize, 
+                         pData->anchor,
+@@ -1509,7 +1509,7 @@
+                 DstType *pColumnEnd = FW_REF::Offset( pDst, pData->dstRoiSize.height * pData->dstStep );
+                 while( pDstElement < pColumnEnd )
+                 {
+-                    CalculateDown(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagDRUR::CalculateDown(  pSrcElement, pData->srcStep,
+                                     pDstElement, pData->dstStep,
+                                     pData->maskSize, 
+                                     pData->anchor,
+@@ -1524,7 +1524,7 @@
+                 if( pDstElement >= pEndDst2 )
+                     break;
+ 
+-                CalculateRight(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagDRUR::CalculateRight(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+@@ -1540,7 +1540,7 @@
+ 
+                 while( pDstElement >= pDst )
+                 {
+-                    CalculateUp(  pSrcElement, pData->srcStep,
++                    TProcessor_ZigZagDRUR::CalculateUp(  pSrcElement, pData->srcStep,
+                                   pDstElement, pData->dstStep,
+                                   pData->maskSize, 
+                                   pData->anchor,
+@@ -1558,7 +1558,7 @@
+                 if( pDst >= pEndDst )
+                     break;
+ 
+-                CalculateRight(  pSrcElement, pData->srcStep,
++                TProcessor_ZigZagDRUR::CalculateRight(  pSrcElement, pData->srcStep,
+                                  pDstElement, pData->dstStep,
+                                  pData->maskSize, 
+                                  pData->anchor,
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/FilterGeneral.cpp.orig	2009-07-09 11:15:34.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/FilterGeneral.cpp	2013-02-22 15:44:44.933889396 +0100
+@@ -125,7 +125,7 @@
+             zero.i = _mm_setzero_si128();
+ 
+             XMM128 divisor_inv;
+-            GetDivisorInv( divisor_inv, pData->divisor );
++            FilterProcessor_superclass::GetDivisorInv( divisor_inv, pData->divisor );
+ 
+             // calculate destination mask for the 4 channel with alpha scenario
+             XMM128 alphaMask;
+@@ -178,17 +178,17 @@
+                     case C1:
+                     case C3:
+                     case C4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+                         pd++;
+                         ps++;
+                         break;
+                     case AC4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+-                        Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+1, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+-                        Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+2, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+                         pd += 4;
+                         ps += 4;
+@@ -201,7 +201,7 @@
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndMiddle; ps+=(16/sizeof(SrcType)), pd+=(16/sizeof(SrcType)) )	// Process 1 horizontal line (16 wide)
+                 {
+-                    SSE2_Aligned_Impl( pData, zero, divisor_inv, kernel, ps, pd, alphaMask );
++                    FilterProcessor_superclass::SSE2_Aligned_Impl( pData, zero, divisor_inv, kernel, ps, pd, alphaMask );
+                 }
+ 
+                 /////////////////////////////////////////////////////////////////
+@@ -214,17 +214,17 @@
+                     case C1:
+                     case C3:
+                     case C4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+                         pd++;
+                         ps++;
+                         break;
+                     case AC4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+-                        Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+1, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+-                        Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+2, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+                         pd += 4;
+                         ps += 4;
+@@ -258,7 +258,7 @@
+             zero.i = _mm_setzero_si128();
+ 
+             XMM128 divisor_inv;
+-            GetDivisorInv( divisor_inv, pData->divisor );
++            FilterProcessor_superclass::GetDivisorInv( divisor_inv, pData->divisor );
+ 
+             XMM128 alphaMask;
+             if( chCount == AC4 )
+@@ -301,7 +301,7 @@
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndMiddle; ps+=(16/sizeof(SrcType)), pd+=(16/sizeof(DstType)) )				// Process 1 horizontal line (16 wide)
+                 {
+-                        SSE2_Unaligned_Impl( pData, zero, divisor_inv, kernel, ps, pd, alphaMask );
++                        FilterProcessor_superclass::SSE2_Unaligned_Impl( pData, zero, divisor_inv, kernel, ps, pd, alphaMask );
+                 }
+ 
+                 /////////////////////////////////////////////////////////////////
+@@ -314,17 +314,17 @@
+                     case C1:
+                     case C3:
+                     case C4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+                         pd++;
+                         ps++;
+                         break;
+                     case AC4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+-                        Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+1, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+-                        Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_superclass::Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+2, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+                         pd += 4;
+                         ps += 4;
+@@ -425,17 +425,17 @@
+                     case C1:
+                     case C3:
+                     case C4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+                         pd++;
+                         ps++;
+                         break;
+                     case AC4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+-                        Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+1, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+-                        Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+2, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+                         pd += 4;
+                         ps += 4;
+@@ -448,7 +448,7 @@
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndMiddle; ps+=(16/sizeof(SrcType)), pd+=(16/sizeof(SrcType)) )	// Process 1 horizontal line (16 wide)
+                 {
+-                    SSE2_Aligned_Impl( pData, zero, kernel, ps, pd, alphaMask );
++                    FilterProcessor_NoDivision_superclass::SSE2_Aligned_Impl( pData, zero, kernel, ps, pd, alphaMask );
+                 }
+ 
+                 /////////////////////////////////////////////////////////////////
+@@ -461,17 +461,17 @@
+                     case C1:
+                     case C3:
+                     case C4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+                         pd++;
+                         ps++;
+                         break;
+                     case AC4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+-                        Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+1, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+-                        Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+2, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+                         pd += 4;
+                         ps += 4;
+@@ -546,7 +546,7 @@
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndMiddle; ps+=(16/sizeof(SrcType)), pd+=(16/sizeof(DstType)) )				// Process 1 horizontal line (16 wide)
+                 {
+-                    SSE2_Unaligned_Impl( pData, zero, kernel, ps, pd, alphaMask );
++                    FilterProcessor_NoDivision_superclass::SSE2_Unaligned_Impl( pData, zero, kernel, ps, pd, alphaMask );
+                 }
+ 
+                 /////////////////////////////////////////////////////////////////
+@@ -559,17 +559,17 @@
+                     case C1:
+                     case C3:
+                     case C4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+                         pd++;
+                         ps++;
+                         break;
+                     case AC4:
+-                        Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+-                        Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps+1, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+1, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+-                        Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
++                        FilterProcessor_NoDivision_superclass::Calculate( FW_REF::Offset( ps+2, yoffset * pData->srcStep + xoffset * actualChCount * sizeof(SrcType) ),
+                                    pData->srcStep, pd+2, pData->dstStep, pKernel, pData->kernelSize, pData->anchor );
+                         pd += 4;
+                         ps += 4;
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/FilterSeparable.cpp.orig	2009-07-09 11:15:34.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/FilterSeparable.cpp	2013-02-22 16:02:53.624049208 +0100
+@@ -396,7 +396,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -529,7 +529,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -701,7 +701,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -767,7 +767,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_32f::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -853,7 +853,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_32f::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -979,7 +979,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_32f::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1045,7 +1045,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_16s::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -1096,7 +1096,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_16s::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1187,7 +1187,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_16s::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1253,7 +1253,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_16s_NoDivision::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -1300,7 +1300,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_16s_NoDivision::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1386,7 +1386,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterColumnProcessor_16s_NoDivision::Calculate( (const SrcType*)(((Fw8u*)ps)+anchorOffset*pData->srcStep), pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1516,7 +1516,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -1646,7 +1646,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1709,7 +1709,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_32f::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -1796,7 +1796,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_32f::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -1864,7 +1864,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_5_32f::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -2034,7 +2034,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_5_32f::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -2101,7 +2101,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_5_16s::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -2195,7 +2195,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_5_16s::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -2262,7 +2262,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_5_16s_NoDivision::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -2353,7 +2353,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_5_16s_NoDivision::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -2421,7 +2421,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_3_32f::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -2535,7 +2535,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_3_32f::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -2602,7 +2602,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_3_16s::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -2666,7 +2666,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_3_16s::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+@@ -2733,7 +2733,7 @@
+                 // process the unaligned "prefix" data (up to 15 bytes)
+                 /////////////////////////////////////////////////////////////////
+                 for( ; pd<pEndStart; ++pd, ++ps ) // Process 1 at a time until we hit an alignment boundary
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_3_16s_NoDivision::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 for( ; pd<pEndMiddle; ps+=16, pd+=16 )				// Process 1 horizontal line (16 wide)
+                 {
+@@ -2794,7 +2794,7 @@
+                 /////////////////////////////////////////////////////////////////
+     
+                 for( ; pd<pEnd; ++pd, ++ps )					// Process the remainder.
+-                    Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
++                    FilterRowProcessor_3_16s_NoDivision::Calculate( ps+anchorOffset, pData->srcStep, pd, pData->dstStep, pKernel, pData->kernelSize, pData->anchor, pData->divisor );
+ 
+                 pSrc = (const SrcType *)(((Fw8u*)pSrc) + pData->srcStep);
+                 pDst = (DstType *)(((Fw8u*)pDst) + pData->dstStep);
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/FilterMedian.cpp.orig	2009-07-09 11:15:34.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/FilterMedian.cpp	2013-02-22 18:19:46.216893594 +0100
+@@ -98,7 +98,7 @@
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength[channel]) = *pElement;
+                     nListLength[channel]++;
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength[channel], nListLength[channel] - 1 );
++                    FilterMedian::OnePassSort( pSortedList + nSortedListLength * channel, nListLength[channel], nListLength[channel] - 1 );
+                     pElement++;
+                     channel = ( channel + 1 ) % chCount;
+                 }
+@@ -130,9 +130,9 @@
+                 int channel = 0;
+                 while( pOldElement < LastElement )
+                 {
+-                    int nOldIndex = BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
++                    int nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
+                     *(pSortedList + nSortedListLength * channel + nOldIndex) = *pNewElement;
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
++                    FilterMedian::OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
+ 
+                     channel = ( channel + 1 ) % chCount;
+                     pOldElement++;
+@@ -167,9 +167,9 @@
+                 int channel = 0;
+                 while( pOldElement < LastElement )
+                 {
+-                    int nOldIndex = BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
++                    int nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
+                     *(pSortedList + nSortedListLength * channel + nOldIndex) = *pNewElement;
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
++                    FilterMedian::OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
+ 
+                     channel = ( channel + 1 ) % chCount;
+                     pOldElement++;
+@@ -201,9 +201,9 @@
+             int channel = 0;
+             while( pOldElement < LastElement )
+             {
+-                int nOldIndex = BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
++                int nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
+                 *(pSortedList + nSortedListLength * channel + nOldIndex) = *pNewElement;
+-                OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
+ 
+                 channel = ( channel + 1 ) % chCount;
+                 pOldElement++;
+@@ -233,9 +233,9 @@
+             int channel = 0;
+             while( pOldElement < LastElement )
+             {
+-                int nOldIndex = BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
++                int nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * channel, nSortedListLength, *pOldElement );
+                 *(pSortedList + nSortedListLength * channel + nOldIndex) = *pNewElement;
+-                OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * channel, nSortedListLength, nOldIndex );
+ 
+                 channel = ( channel + 1 ) % chCount;
+                 pOldElement++;
+@@ -281,9 +281,9 @@
+                     *(pSortedList + nSortedListLength * 1 + nListLength) = *(pElement+1);
+                     *(pSortedList + nSortedListLength * 2 + nListLength) = *(pElement+2);
+                     nListLength++;
+-                    OnePassSort( pSortedList + nSortedListLength * 0, nListLength, nListLength - 1 );
+-                    OnePassSort( pSortedList + nSortedListLength * 1, nListLength, nListLength - 1 );
+-                    OnePassSort( pSortedList + nSortedListLength * 2, nListLength, nListLength - 1 );
++		    FilterMedian::OnePassSort( pSortedList + nSortedListLength * 0, nListLength, nListLength - 1 );
++		    FilterMedian::OnePassSort( pSortedList + nSortedListLength * 1, nListLength, nListLength - 1 );
++		    FilterMedian::OnePassSort( pSortedList + nSortedListLength * 2, nListLength, nListLength - 1 );
+                     pElement += C4;
+                 }
+                 pSrc = (SrcType*)(((Fw8u*)(pSrc)) + srcstep);
+@@ -312,19 +312,19 @@
+                 int nOldIndex;
+ 
+                 // red channel
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
+                 *(pSortedList + nSortedListLength * 0 + nOldIndex) = *pNewElement;
+-                OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
+ 
+                 // green channel
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
+                 *(pSortedList + nSortedListLength * 1 + nOldIndex) = *(pNewElement+1);
+-                OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
+ 
+                 // blue channel
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
+                 *(pSortedList + nSortedListLength * 2 + nOldIndex) = *(pNewElement+2);
+-                OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
+ 
+                 pOldElement = (SrcType*)(((Fw8u*)pOldElement) + srcstep);
+                 pNewElement = (SrcType*)(((Fw8u*)pNewElement) + srcstep);
+@@ -352,19 +352,19 @@
+             while( pOldElement < pEnd )
+             {
+                 // red channel
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
+                 *(pSortedList + nSortedListLength * 0 + nOldIndex) = *pNewElement;
+-                OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
+ 
+                 // green channel
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
+                 *(pSortedList + nSortedListLength * 1 + nOldIndex) = *(pNewElement+1);
+-                OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
+ 
+                 // blue channel
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
+                 *(pSortedList + nSortedListLength * 2 + nOldIndex) = *(pNewElement+2);
+-                OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
+ 
+                 pOldElement = (SrcType*)(((Fw8u*)pOldElement) + srcstep);
+                 pNewElement = (SrcType*)(((Fw8u*)pNewElement) + srcstep);
+@@ -391,17 +391,17 @@
+             int nOldIndex;
+             while( pOldElement < LastElement )
+             {
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
+                 *(pSortedList + nSortedListLength * 0 + nOldIndex) = *pNewElement;
+-                OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
+ 
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
+                 *(pSortedList + nSortedListLength * 1 + nOldIndex) = *(pNewElement+1);
+-                OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
+ 
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
+                 *(pSortedList + nSortedListLength * 2 + nOldIndex) = *(pNewElement+2);
+-                OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
+ 
+                 pOldElement+=4;
+                 pNewElement+=4;
+@@ -428,17 +428,17 @@
+             int nOldIndex;
+             while( pOldElement < LastElement )
+             {
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 0, nSortedListLength, *pOldElement );
+                 *(pSortedList + nSortedListLength * 0 + nOldIndex) = *pNewElement;
+-                OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 0, nSortedListLength, nOldIndex );
+ 
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 1, nSortedListLength, *(pOldElement+1) );
+                 *(pSortedList + nSortedListLength * 1 + nOldIndex) = *(pNewElement+1);
+-                OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 1, nSortedListLength, nOldIndex );
+ 
+-                nOldIndex = BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
++                nOldIndex = FilterMedian::BinarySearch( pSortedList + nSortedListLength * 2, nSortedListLength, *(pOldElement+2) );
+                 *(pSortedList + nSortedListLength * 2 + nOldIndex) = *(pNewElement+2);
+-                OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
++                FilterMedian::OnePassSort( pSortedList + nSortedListLength * 2, nSortedListLength, nOldIndex );
+ 
+                 pOldElement+=4;
+                 pNewElement+=4;
+@@ -476,7 +476,7 @@
+                 for( int channel = 0; channel < chCount; channel++ )
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength) = *(pElement + channel);
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
++                    FilterMedianCross::OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
+                 }
+                 nListLength++;
+                 pElement = (SrcType*)(((Fw8u*)(pElement)) + srcstep);
+@@ -489,7 +489,7 @@
+                 for( int channel = 0; channel < chCount; channel++ )
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength) = *(pElement + channel);
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
++                    FilterMedianCross::OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
+                 }
+                 nListLength++;
+                 pElement += chCount;
+@@ -501,7 +501,7 @@
+                 for( int channel = 0; channel < chCount; channel++ )
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength) = *(pElement + channel);
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
++                    FilterMedianCross::OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
+                 }
+                 nListLength++;
+                 pElement += chCount;
+@@ -541,7 +541,7 @@
+                 for( int channel = 0; channel < C3; channel++ )
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength) = *(pElement + channel);
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
++                    FilterMedianCross::OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
+                 }
+                 nListLength++;
+                 pElement = (SrcType*)(((Fw8u*)(pElement)) + srcstep);
+@@ -554,7 +554,7 @@
+                 for( int channel = 0; channel < C3; channel++ )
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength) = *(pElement + channel);
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
++                    FilterMedianCross::OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
+                 }
+                 nListLength++;
+                 pElement += chCount;
+@@ -566,7 +566,7 @@
+                 for( int channel = 0; channel < C3; channel++ )
+                 {
+                     *(pSortedList + nSortedListLength * channel + nListLength) = *(pElement + channel);
+-                    OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
++                    FilterMedianCross::OnePassSort( pSortedList + nSortedListLength * channel, nListLength + 1, nListLength );
+                 }
+                 nListLength++;
+                 pElement += chCount;
+@@ -603,45 +603,45 @@
+             const SrcType * pSrcAbove = (const SrcType *)(((Fw8u*)pSrcPtr) - srcstep);
+             const SrcType * pSrcBelow = (const SrcType *)(((Fw8u*)pSrcPtr) + srcstep);
+             const SrcType * pMinPtr = pSrcPtr - chCount;
+-            minDist = Distance( pSrcPtr, pMinPtr );
++            minDist = FilterMedianColor3x3::Distance( pSrcPtr, pMinPtr );
+ 
+-            tempDist = Distance( pSrcPtr, pSrcPtr + chCount );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcPtr + chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcPtr + chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove - chCount );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcAbove - chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove - chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcAbove );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove + chCount );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcAbove + chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove + chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow - chCount );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcBelow - chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow - chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcBelow );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow + chCount );
++            tempDist = FilterMedianColor3x3::Distance( pSrcPtr, pSrcBelow + chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow + chCount;
+@@ -656,7 +656,7 @@
+                                                    const FwiPoint & /*anchor*/ )
+         {
+             CalcType minDist;
+-            const SrcType * pMinPtr = FindMinimum3x3( pSrcPtr, srcstep, minDist );
++            const SrcType * pMinPtr = FilterMedianColor3x3::FindMinimum3x3( pSrcPtr, srcstep, minDist );
+             *(pDst+0) = *(pMinPtr+0);
+             *(pDst+1) = *(pMinPtr+1);
+             *(pDst+2) = *(pMinPtr+2);
+@@ -674,99 +674,99 @@
+             const SrcType * pSrcBelow = (const SrcType *)(((Fw8u*)pSrcPtr) + srcstep);
+             const SrcType * pSrcBelow2 = (const SrcType *)(((Fw8u*)pSrcPtr) + 2 * srcstep);
+             
+-            const SrcType * pMinPtr = FindMinimum3x3( pSrcPtr, srcstep, minDist );
++            const SrcType * pMinPtr = FilterMedianColor5x5::FindMinimum3x3( pSrcPtr, srcstep, minDist );
+ 
+-            tempDist = Distance( pSrcPtr, pSrcPtr - chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcPtr - chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcPtr - chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcPtr + chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcPtr + chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcPtr + chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove - chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove - chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove - chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove2 - chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove2 - chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove2 - chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove2 - chCount );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove2 - chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove2 - chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove2 + chCount );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove2 + chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove2 + chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove2 + chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove2 + chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove2 + chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcAbove + chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcAbove + chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcAbove + chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow - chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow - chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow - chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow2 - chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow2 - chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow2 - chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow2 - chCount );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow2 - chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow2 - chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow2 + chCount );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow2 + chCount );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow2 + chCount;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow2 + chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow2 + chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow2 + chCount * 2;
+                 minDist = tempDist;
+             }
+-            tempDist = Distance( pSrcPtr, pSrcBelow + chCount * 2 );
++            tempDist = FilterMedianColor5x5::Distance( pSrcPtr, pSrcBelow + chCount * 2 );
+             if( tempDist < minDist )
+             {
+                 pMinPtr = pSrcBelow + chCount * 2;
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/Arithmetic/Impl/DivImpl.h.orig	2009-07-09 11:15:36.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/Arithmetic/Impl/DivImpl.h	2013-02-22 18:38:06.717591849 +0100
+@@ -162,58 +162,6 @@
+ 
+ 
+ 	template <class TS>  SYS_INLINE  STATIC
+-	TS SafeDivC_scale(const TS &s, const TS &v, int scale)
+-	{
+-		if(!v)
+-			return s ;
+-		else
+-			return DivC_scale(s, v, scale);
+-	}
+-
+-	template <class TS>  SYS_INLINE  STATIC
+-	TS SafeDivC_scale(const TS &s, const TS &v, const TS &d, int scale)
+-	{
+-		if(!v)
+-			return d ;
+-		else
+-			return DivC_scale(s, v, scale );
+-	}
+-
+-	template<class TS>  STATIC
+-	TS SafeDivC(const TS &s, const TS &v, const TS &d )
+-	{
+-		if(!v)
+-			return d;
+-		else
+-			return s/v ;
+-	}
+-
+-	static A32F SafeDivCR(const A32F &s, const A32F &v)
+-	{
+-		if(!v)
+-		{
+-			if(s>0)	return Const::INF_32F;
+-			if(s<0)	return Const::INF_NEG_32F;
+-			else return Const::IND_32F;
+-
+-		}
+-		else
+-			return s/v ;
+-	}
+-
+-	template<class TS>  STATIC
+-	TS SafeDivCR(const TS &s, const TS &v)
+-	{
+-		if(!v)
+-			if (!s)
+-				return 0;
+-			else
+-				return FW_REF::Limits< TS >::MaxValue();
+-		else
+-			return s/v ;
+-	}
+-
+-	template <class TS>  SYS_INLINE  STATIC
+ 	TS DivC_scale(const TS &s, const TS &v, int scale)
+ 	{
+ 		return FW_REF::Limits<TS>::Sat(CBL_LIBRARY::DoubleToInt(FW_REF::Scale((float) s / v, scale)));
+@@ -273,6 +221,58 @@
+ 		return d;
+ 	}
+ 
++	template <class TS>  SYS_INLINE  STATIC
++	TS SafeDivC_scale(const TS &s, const TS &v, int scale)
++	{
++		if(!v)
++			return s ;
++		else
++			return DivC_scale(s, v, scale);
++	}
++
++	template <class TS>  SYS_INLINE  STATIC
++	TS SafeDivC_scale(const TS &s, const TS &v, const TS &d, int scale)
++	{
++		if(!v)
++			return d ;
++		else
++			return DivC_scale(s, v, scale );
++	}
++
++	template<class TS>  STATIC
++	TS SafeDivC(const TS &s, const TS &v, const TS &d )
++	{
++		if(!v)
++			return d;
++		else
++			return s/v ;
++	}
++
++	static A32F SafeDivCR(const A32F &s, const A32F &v)
++	{
++		if(!v)
++		{
++			if(s>0)	return Const::INF_32F;
++			if(s<0)	return Const::INF_NEG_32F;
++			else return Const::IND_32F;
++
++		}
++		else
++			return s/v ;
++	}
++
++	template<class TS>  STATIC
++	TS SafeDivCR(const TS &s, const TS &v)
++	{
++		if(!v)
++			if (!s)
++				return 0;
++			else
++				return FW_REF::Limits< TS >::MaxValue();
++		else
++			return s/v ;
++	}
++
+ 	namespace DIV
+ 	{
+ 		template< class TS1, class TS2, class TD >
