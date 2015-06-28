@@ -13,13 +13,14 @@ Source0:	http://downloads.sourceforge.net/framewave/FRAMEWAVE_%{version}_SRC.tar
 # Source0-md5:	86a28ebfbfd70be06ab54d0d8b17ebd7
 Patch0:		%{name}-system-boost.patch
 Patch1:		%{name}-c++.patch
+Patch2:		no-forced-arch-bits.patch
 URL:		http://framewave.sourceforge.net/
 BuildRequires:	boost-devel >= 1.34
 BuildRequires:	libstdc++-devel
 BuildRequires:	rpmbuild(macros) >= 1.385
 BuildRequires:	scons
 BuildRequires:	sed >= 4.0
-ExclusiveArch:	%{ix86} %{x8664}
+ExclusiveArch:	%{ix86} %{x8664} x32
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -66,6 +67,7 @@ Statyczne biblioteki Framewave.
 %setup -q -n FRAMEWAVE_%{version}_SRC
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # kill precompiled binaries
 %{__rm} BuildTools/bin/FwHeaderConvert_*
@@ -77,7 +79,7 @@ cd Framewave
 mkdir -p build/{include,tmp,bin}
 for kind in shared %{?with_static_libs:static} ; do
 %scons \
-%ifarch %{x8664}
+%ifarch %{x8664} x32
 	bitness=64 \
 %else
 	bitness=32 \

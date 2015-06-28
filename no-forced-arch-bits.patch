@@ -1,0 +1,21 @@
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwflags_gcc.py~	2015-06-28 11:42:44.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwflags_gcc.py	2015-06-28 11:44:30.087654112 +0200
+@@ -27,9 +27,6 @@
+ dctCCFlags[r'-msse2']        = [ss2]
+ dctCCFlags[r'-msse3']        = [[ss2,f10]]
+ 
+-dctCCFlags[r'-m32']          = [b32]
+-dctCCFlags[r'-m64']          = [b64]
+-
+ dctCCFlags[r'-g']            = [dbg]
+ 
+ dctCCFlags[r'-Werror']       = []
+@@ -62,8 +59,6 @@
+ 
+ 
+ dctLDFlags[r'-lrt -pthread -lm -Wl -hlib${PROJECTNAME}.so.1'] = [shr, sol]
+-dctLDFlags[r'-m32']          = [b32]
+-dctLDFlags[r'-m64']          = [b64]
+ 
+ 
+ dctLDFlags['-install_name /usr/local/lib/${BITNESS}'+ \
