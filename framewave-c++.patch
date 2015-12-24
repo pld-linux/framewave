@@ -1422,3 +1422,34 @@
  	namespace DIV
  	{
  		template< class TS1, class TS2, class TD >
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/Mirror.cpp.orig	2009-07-09 11:15:34.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/Mirror.cpp	2015-12-24 13:41:28.316508869 +0100
+@@ -1130,9 +1130,7 @@
+ 		TS *ptDstRow ;
+ 		bool isAligned ;
+ 
+-		switch((chSrc <= 4))
+-		{
+-		case(true):
++		if(chSrc <= 4) {
+ 			for (y=0; y<roiSize.height; y++) {
+ 				ptSrcRow = &pSrc[y*srcStep] ;
+ 				ptDstRow = &pDst[(roiSize.height-y-1)*dstStep];
+@@ -1143,8 +1141,7 @@
+ 				else
+ 					Memcpy_SSE2<false>(ptDstRow, ptSrcRow, numBytes);
+ 			}
+-			break;
+-		default: //AC4
++		} else { //AC4
+ 			__m128i mask;
+ 			Get_AC4_mask<TS>(mask);	
+ 			for (y=0; y<roiSize.height; y++){
+@@ -1157,7 +1154,6 @@
+ 				else
+ 					Memcpy_AC4_SSE2<TS, false>(ptDstRow, ptSrcRow, numBytes, mask);	
+ 			}
+-			break;
+ 		}
+ 		return fwStsNoErr;
+ 	}
