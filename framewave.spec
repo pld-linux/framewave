@@ -6,7 +6,7 @@ Summary:	Framewave - set of popular image and signal processing routines
 Summary(pl.UTF-8):	Framewave - zestaw popularnych funkcji do przetwarzania obrazu i sygnału
 Name:		framewave
 Version:	1.3.1
-Release:	10
+Release:	11
 License:	Apache v2.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/framewave/FRAMEWAVE_%{version}_SRC.tar.gz
