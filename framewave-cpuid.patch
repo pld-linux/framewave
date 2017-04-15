@@ -1,0 +1,78 @@
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwBase/src/system.cpp.orig	2009-07-09 11:15:36.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwBase/src/system.cpp	2017-04-15 12:04:33.188802940 +0200
+@@ -18,6 +18,8 @@ void * x_baseDataPtr = 0;
+     #pragma intrinsic(__cpuid)
+     #pragma intrinsic(__rdtsc)
+ 
++    #define get_cpuid __cpuid
++
+     static inline __int64 get_rdtsc_sys()
+     {
+         return __rdtsc();
+@@ -35,37 +37,8 @@ void * x_baseDataPtr = 0;
+ // Linux
+ #elif defined( FW_LIN ) || defined( FW_MAC )
+ 
+-    // CPUID
+-    #if defined( FW_SYS64 )
+-
+-        #define __cpuid(CPUInfo, InfoType)    __asm__ __volatile__("    pushq %%rbx;                      \
+-                                                                    xorq %%rax, %%rax;                    \
+-                                                                    movl %%esi, %%eax;                    \
+-                                                                    cpuid;                                \
+-                                                                    movl %%eax, 0x0(%%rdi);               \
+-                                                                    movl %%ebx, 0x4(%%rdi);               \
+-                                                                    movl %%ecx, 0x8(%%rdi);               \
+-                                                                    movl %%edx, 0xc(%%rdi);               \
+-                                                                    popq %%rbx;"                          \
+-                                                                    : : "D" (CPUInfo), "S" (InfoType)     \
+-                                                                    : "%rax", "%rcx", "%rdx" )
+-
+-    #elif defined( FW_SYS32 )
+-
+-        #define __cpuid(CPUInfo, InfoType)    __asm__ __volatile__("    pushl %%ebx;                      \
+-                                                                    xorl %%eax, %%eax;                    \
+-                                                                    movl %%esi, %%eax;                    \
+-                                                                    cpuid;                                \
+-                                                                    movl %%eax, 0x0(%%edi);               \
+-                                                                    movl %%ebx, 0x4(%%edi);               \
+-                                                                    movl %%ecx, 0x8(%%edi);               \
+-                                                                    movl %%edx, 0xc(%%edi);               \
+-                                                                    popl %%ebx;"                          \
+-                                                                    : : "D" (CPUInfo), "S" (InfoType)     \
+-                                                                    : "%eax", "%ecx", "%edx" )
+-
+-    #endif
+-
++    #include <cpuid.h>
++    #define get_cpuid(CPUInfo, InfoType) __cpuid(InfoType, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3])
+     // RDTSC
+     #define rdtsc(low,high) __asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high))
+ 
+@@ -127,7 +100,7 @@ void * x_baseDataPtr = 0;
+         }
+ 
+         #define rdtsc rdtsc64
+-        #define __cpuid cpuid64
++        #define get_cpuid cpuid64
+ 
+     #elif    defined( FW_SYS32 )
+ 
+@@ -157,7 +130,7 @@ void * x_baseDataPtr = 0;
+         }
+         
+         #define rdtsc rdtsc32
+-        #define __cpuid cpuid32
++        #define get_cpuid cpuid32
+ 
+     #endif
+ 
+@@ -215,7 +188,7 @@ template< class T >    unsigned MSBPos()
+ FwCpuType GetCpuType()
+ {
+     int out[4];
+-    __cpuid( out, CPUID_CODE_FEATURES );    
++    get_cpuid( out, CPUID_CODE_FEATURES );    
+     
+     if( IsSet( out[CPUID_INDEX_SSE4A   ], CPUID_BIT_SSE4A)) return fwCpuFamily10h;
+     if( IsSet( out[CPUID_INDEX_SSE3    ], CPUID_BIT_SSE3 )) return fwCpuSSE3;

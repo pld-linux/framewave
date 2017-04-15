@@ -6,7 +6,7 @@ Summary:	Framewave - set of popular image and signal processing routines
 Summary(pl.UTF-8):	Framewave - zestaw popularnych funkcji do przetwarzania obrazu i sygnału
 Name:		framewave
 Version:	1.3.1
-Release:	11
+Release:	12
 License:	Apache v2.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/framewave/FRAMEWAVE_%{version}_SRC.tar.gz
@@ -15,6 +15,8 @@ Patch0:		%{name}-system-boost.patch
 Patch1:		%{name}-c++.patch
 Patch2:		no-forced-arch-bits.patch
 Patch3:		%{name}-templates.patch
+Patch4:		%{name}-warnings.patch
+Patch5:		%{name}-cpuid.patch
 URL:		http://framewave.sourceforge.net/
 BuildRequires:	boost-devel >= 1.34
 BuildRequires:	libstdc++-devel
@@ -70,6 +72,8 @@ Statyczne biblioteki Framewave.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 # kill precompiled binaries
 %{__rm} BuildTools/bin/FwHeaderConvert_*

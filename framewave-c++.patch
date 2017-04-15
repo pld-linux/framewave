@@ -1453,3 +1453,104 @@
  		}
  		return fwStsNoErr;
  	}
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/fwdev.h.orig	2009-07-09 11:15:40.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/fwdev.h	2017-04-15 12:01:46.003904127 +0200
+@@ -36,7 +36,7 @@ This software is subject to the Apache v
+ //=======================================
+ //    Static Assert
+ //=======================================
+-#define STATIC_ASSERT( arg ) static_assert<arg>()
++#define STATIC_ASSERT( arg ) fw_static_assert<arg>()
+ 
+ 
+ //=======================================
+@@ -83,12 +83,12 @@ namespace OPT_LEVEL
+ {
+ 
+     template<bool b>
+-    struct static_assert {};
++    struct fw_static_assert {};
+     template<>
+-    struct static_assert<false>
++    struct fw_static_assert<false>
+     {
+         private:
+-            static_assert();
++            fw_static_assert();
+     };
+ } // namespace OPT_LEVEL
+ 
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/Filter.h.orig	2009-07-09 11:15:30.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/Filter.h	2017-04-15 12:56:42.006179581 +0200
+@@ -1119,22 +1119,22 @@ namespace FilterCommon
+                         typename _DstType_, 
+                         typename _CalcType_, 
+                         template< CH, 
+-                                  typename _SrcType_, 
+-                                  typename _DstType_, 
+-                                  typename _CalcType_,
+-                                  template< CH _chCount_,
+-                                            typename _SrcType_ > class _BorderType_
++                                  typename, 
++                                  typename, 
++                                  typename,
++                                  template< CH,
++                                            typename > class _BorderType_
+                                 > class _Operator_,
+                         template< typename, typename > class _DataType_,
+-                        template< CH _chCount_,
+-                                  typename _SrcType_ > class _BorderType_
++                        template< CH,
++                                  typename> class _BorderType_
+                       > class Processor,
+               template< CH _chCount_, 
+                         typename _SrcType_, 
+                         typename _DstType_, 
+                         typename _CalcType_,
+-                        template< CH _chCount_,
+-                                  typename _SrcType_ > class _BorderType_
++                        template< CH,
++                                  typename > class _BorderType_
+                       > class Operator,
+               template< typename _SrcType_,
+                         typename _DstType_
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwVideo/src/H264-Transform.cpp.orig	2009-07-09 11:15:35.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwVideo/src/H264-Transform.cpp	2017-04-15 13:45:20.673252419 +0200
+@@ -114,7 +114,7 @@ FwStatus PREFIX_OPT(OPT_PREFIX, fwiTrans
+ 	count = 0;
+ 	for (coeff_ctr=0;coeff_ctr<4;coeff_ctr++)
+ 	{
+-	    level =(abs(pTBlock[coeff_ctr]) * quant_coef[qp_rem][0][0] + 2*qp_const) >> (q_bits+1);
++	    level =(absm(pTBlock[coeff_ctr]) * quant_coef[qp_rem][0][0] + 2*qp_const) >> (q_bits+1);
+ 		pSrcDst[coeff_ctr]=(Fw16s) sign(level,pTBlock[coeff_ctr]);
+ 		if(pSrcDst[coeff_ctr] > MAX_CAVLC_LEVEL_VALUE) return fwStsScaleRangeErr;
+ 	}
+@@ -189,7 +189,7 @@ FwStatus PREFIX_OPT(OPT_PREFIX, fwiTrans
+ 	for (coeff_ctr=0;coeff_ctr<16;coeff_ctr++)
+ 	{
+ 		i=pScanMatrix[coeff_ctr];
+-		level= (abs(pTBlock[i]) * quant_coef[qp_rem][0][0] + 2*qp_const)>>(q_bits+1);
++		level= (absm(pTBlock[i]) * quant_coef[qp_rem][0][0] + 2*qp_const)>>(q_bits+1);
+ 		pSrcDst[i]=(Fw16s)sign(level,pTBlock[i]);
+ 		if(pSrcDst[i] > MAX_CAVLC_LEVEL_VALUE) return fwStsScaleRangeErr;
+ 	}
+@@ -267,7 +267,7 @@ FwStatus PREFIX_OPT(OPT_PREFIX, fwiTrans
+ 	{
+ 		i=pScanMatrix[coeff_ctr];
+ 
+-        level= ( abs( pSrcDst[i]) * quant_coef[qp_rem][i/4][i%4] + qp_const) >> q_bits;
++        level= ( absm( pSrcDst[i]) * quant_coef[qp_rem][i/4][i%4] + qp_const) >> q_bits;
+ 		pSrcDst[i]=(Fw16s)sign(level*dequant_coef[qp_rem][i/4][i%4]<<qp_per,pSrcDst[i]);
+ 		if(pSrcDst[i] > MAX_CAVLC_LEVEL_VALUE) return fwStsScaleRangeErr;
+ 	}
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/SSEPlus_base.h.orig	2009-07-09 11:15:29.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/SSEPlus_base.h	2017-04-15 12:18:16.139325970 +0200
+@@ -86,7 +86,7 @@ const static double SSP_F64_ALLOWANCE =
+ //---------------------------------------
+ #define STRING2(x) #x
+ #define STRING(x) STRING2(x)
+-#define WARN( ) __FILE__"("STRING(__LINE__)") : NOTE "
++#define WARN( ) __FILE__ "(" STRING(__LINE__) ") : NOTE "
+ 
+ //#define _SSP_SHUFFLE(w,x,y,z) (((w)<<3) | ((x)<<2) | ((y)<<1) | (z))
+ 

@@ -1,0 +1,343 @@
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/cbl/cbl_common_primitives.h.orig	2009-07-09 11:14:37.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/cbl/cbl_common_primitives.h	2017-04-15 11:28:42.272853562 +0200
+@@ -152,6 +152,11 @@ union CBL_FORCEALIGN_16 XMM128
+     S8      s8 [16];  
+ };
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
++
+ #if defined( CBL_MSVC )
+ 
+ namespace CBL_LIBRARY
+@@ -648,4 +653,8 @@ namespace CBL_LIBRARY
+ 
+ } // namespace CBL_LIBRARY
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
++
+ #endif // __CBL_COMMON_PRIMITIVES_H__
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/color.h.orig	2009-07-09 11:15:30.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/color.h	2017-04-15 12:22:56.753144791 +0200
+@@ -266,12 +266,19 @@ namespace OPT_LEVEL
+ //Cb 38	74	112	 9 19 28
+ //Cr 112 94 18   28 24 4 
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+         static const __m128i rgbtoYcbcr_Y = CONST_SET_16I(25,129,66,0,0,25,129,66);
+         static const __m128i rgbtoYcbcr_crcb = CONST_SET_16I(-4,-24,28,0,0,28,-19,-9);
+         static const __m128i const128 = CONST_SET_16I(0,0,0,128,128,0,0,0);
+         static const __m128i const16 = CONST_SET_16I(0,16,0,16,0,16,0,16);
+         static const __m128i addconst128 = CONST_SET_16I(0,0,0,128,0,0,0,128);
+         static const __m128i zero = CONST_SET1_32I(0);
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+ 
+         if (row > 1) // Condition: 1) # of rows = 2
+         {
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/colorModelConvSpecial.h.orig	2009-07-09 11:15:30.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/colorModelConvSpecial.h	2017-04-15 13:21:50.183726931 +0200
+@@ -214,9 +214,9 @@ namespace OPT_LEVEL
+                     pfn( ptrSrc    , C1, ((A8U *)pDst + 1), C1 ); // A0
+                     pfn( ptrSrc + 3, C1, ((A8U *)pDst + 3), C1 ); // A1
+                     // Calculate the average of the two pixel values for 422 compression
+-                    TS srcData[3] = { (*ptrSrc       + *(ptrSrc + 3))>>1,   // R
+-                                      (*(ptrSrc + 1) + *(ptrSrc + 4))>>1,   // G
+-                                      (*(ptrSrc + 2) + *(ptrSrc + 5))>>1 }; // B
++                    TS srcData[3] = { static_cast<TS>((*ptrSrc       + *(ptrSrc + 3))>>1),   // R
++                                      static_cast<TS>((*(ptrSrc + 1) + *(ptrSrc + 4))>>1),   // G
++                                      static_cast<TS>((*(ptrSrc + 2) + *(ptrSrc + 5))>>1) }; // B
+                     pfn( srcData, C3, tempDst, C3 );
+                     *(A8U *)pDst       = tempDst[1]; // B0
+                     *(A8U *)(pDst + 2) = tempDst[2]; // C0
+@@ -280,9 +280,9 @@ namespace OPT_LEVEL
+                     pfn( ptrSrc    , C1, (pDst + 1 ), C1 );  // A0
+                     pfn( ptrSrc + 4, C1, (pDst + 3 ), C1 );  // A1
+                     // Calculate the average of the two pixel values for 422 compression
+-                    TS srcData[3] = { (*ptrSrc     + *(ptrSrc + 4))>>1,   // R
+-                                      (*(ptrSrc+1) + *(ptrSrc + 5))>>1,   // G
+-                                      (*(ptrSrc+2) + *(ptrSrc + 6))>>1 }; // B
++                    TS srcData[3] = { static_cast<TS>((*ptrSrc     + *(ptrSrc + 4))>>1),   // R
++                                      static_cast<TS>((*(ptrSrc+1) + *(ptrSrc + 5))>>1),   // G
++                                      static_cast<TS>((*(ptrSrc+2) + *(ptrSrc + 6))>>1) }; // B
+ 
+                     pfn( srcData, C3, tempDst, C3 );
+ 
+@@ -350,9 +350,9 @@ namespace OPT_LEVEL
+                     pfn( ptrSrc  , C1, pDst       , C1 );    // A0
+                     pfn( ptrSrc+3, C1, (pDst + 2 ), C1 );    // A1
+                     // Calculate the average of the two pixel values for 422 compression
+-                    TS srcData[3] = { (*ptrSrc       + *(ptrSrc + 3))>>1, 
+-                                      (*(ptrSrc + 1) + *(ptrSrc + 4))>>1,
+-                                      (*(ptrSrc + 2) + *(ptrSrc + 5))>>1 };
++                    TS srcData[3] = { static_cast<TS>((*ptrSrc       + *(ptrSrc + 3))>>1), 
++                                      static_cast<TS>((*(ptrSrc + 1) + *(ptrSrc + 4))>>1),
++                                      static_cast<TS>((*(ptrSrc + 2) + *(ptrSrc + 5))>>1) };
+ 
+                     pfn( srcData , C3, tempDst, C3 );
+ 
+@@ -569,9 +569,9 @@ namespace OPT_LEVEL
+                     pfn( ptrSrc+3, C1, pDst[0] + 1, C1 ); // A1
+ 
+                     // Calculate the average of the two pixel values for 422 compression
+-                    TS srcData[3] = { (*ptrSrc     + *(ptrSrc+3))>>1, 
+-                                      (*(ptrSrc+1) + *(ptrSrc+4))>>1,
+-                                      (*(ptrSrc+2) + *(ptrSrc+5))>>1 };
++                    TS srcData[3] = { static_cast<TS>((*ptrSrc     + *(ptrSrc+3))>>1), 
++                                      static_cast<TS>((*(ptrSrc+1) + *(ptrSrc+4))>>1),
++                                      static_cast<TS>((*(ptrSrc+2) + *(ptrSrc+5))>>1) };
+                     
+                     pfn (srcData, C3, tempDst, C3);
+                     *(pDst[1]) = tempDst[1]; // B0
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/cbl/cbl_pack_unpack_primitives_sse2.h.orig	2009-07-09 11:14:37.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/cbl/cbl_pack_unpack_primitives_sse2.h	2017-04-15 11:31:37.638153156 +0200
+@@ -358,8 +358,16 @@ CBL_INLINE  __m128i CBL_SSE2::Pack64STo3
+ 	__m128i  h2= _mm_unpackhi_epi32(srcLo,srcHi);
+ 	__m128i hBytes	= _mm_unpackhi_epi32(h1,h2);
+ 	__m128i lBytes	= _mm_unpacklo_epi32(h1,h2);
++
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+ 	 const __m128i zero =  CONST_SETZERO_32I();
+ 	 const __m128i nOne =  CONST_SET1_32I(0xFFFFFFFF);
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+ 
+ 	__m128i x = _mm_cmplt_epi32(hBytes,nOne);
+ 			h1 = _mm_slli_epi32(x,31);
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/arithmetic/SSEPlus_arithmetic_SSE2.h.orig	2009-07-09 11:15:28.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/arithmetic/SSEPlus_arithmetic_SSE2.h	2017-04-15 13:05:16.648171534 +0200
+@@ -90,7 +90,14 @@ __m128i ssp_arithmetic_hadd4_epi16_SSE2(
+ SSP_FORCEINLINE
+ __m128 ssp_round_ps_neg_zero_SSE2( __m128  a, int iRoundMode )
+ {
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+     const static __m128i SIGN_BIT = SSP_CONST_SET_32I( 0x80000000, 0x80000000, 0x80000000,0x80000000 );
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+     ssp_m128 A, sign;
+     A.f = a;
+     
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/convert/SSEPlus_convert_SSE2.h.orig	2009-07-09 11:15:28.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/convert/SSEPlus_convert_SSE2.h	2017-04-15 13:20:25.736238223 +0200
+@@ -149,11 +149,18 @@ void ssp_convert_reverse_transpose_SSE2(
+ SSP_FORCEINLINE
+ void ssp_convert_3p_3c_epi8_SSE2( __m128i *r, __m128i *g, __m128i *b )
+ {
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+     const static __m128i odd_8  = SSP_CONST_SET_8I(   0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0 );
+     const static __m128i even_8 = SSP_CONST_SET_8I( 0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF,0,0xFF   );
+ 
+     const static __m128i odd_16  = SSP_CONST_SET_16I(   0xFFFF,0,0xFFFF,0,0xFFFF,0,0xFFFF,0 );
+     const static __m128i even_16 = SSP_CONST_SET_16I( 0,0xFFFF,0,0xFFFF,0,0xFFFF,0,0xFFFF   );    
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+ 
+    ssp_m128 T, RG, GB, BR, RGBR, GBRG, BRGB;
+     
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/emulation/SSEPlus_emulation_comps_REF.h.orig	2009-07-09 11:15:28.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/emulation/SSEPlus_emulation_comps_REF.h	2017-04-15 12:22:09.457482384 +0200
+@@ -1598,7 +1598,14 @@ SSP_FORCEINLINE __m128 ssp_comgt_ss_REF(
+ SSP_FORCEINLINE __m128i ssp_comtrue_epi16_REF(__m128i a, __m128i b)
+ {
+     a; b;
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+ 	const static __m128i tmp = SSP_CONST_SET_64I( 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL );  
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+     return tmp;
+ }
+ 
+@@ -1648,7 +1655,14 @@ SSP_FORCEINLINE __m128i ssp_comtrue_epu8
+ SSP_FORCEINLINE __m128d ssp_comtrue_pd_REF(__m128d a, __m128d b)
+ {   
+     a; b;
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+     const static __m128i tmp = SSP_CONST_SET_64I( 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL );
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+     ssp_m128 A;  
+     A.i = tmp;
+     return A.d;
+@@ -1658,7 +1672,14 @@ SSP_FORCEINLINE __m128d ssp_comtrue_pd_R
+ SSP_FORCEINLINE __m128 ssp_comtrue_ps_REF(__m128 a, __m128 b)
+ {   
+     a; b;
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+     const static __m128i tmp = SSP_CONST_SET_64I( 0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL );
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+     ssp_m128 A;  
+     A.i = tmp;
+     return A.f;
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/emulation/SSEPlus_emulation_SSE2.h.orig	2009-07-09 11:15:28.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/emulation/SSEPlus_emulation_SSE2.h	2017-04-15 13:03:50.600603842 +0200
+@@ -13,6 +13,11 @@
+ #include "SSEPlus_emulation_comps_SSE2.h"
+ 
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
++
+ /** @addtogroup emulated_SSE2   
+  *  @{ 
+  *  @name SSE[3,4A,...,5] implemented in SSE2
+@@ -2185,4 +2190,8 @@ SSP_FORCEINLINE __m128i ssp_shl_epi64_SS
+  */
+ 
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
++
+ #endif // __SSEPLUS_EMULATION_SSE2_H__
+--- FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/logical/SSEPlus_logical_SSE2.h.orig	2009-07-09 11:15:29.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/sdk/SSEPlus/include/logical/SSEPlus_logical_SSE2.h	2017-04-15 12:44:16.222807366 +0200
+@@ -7,6 +7,11 @@
+ 
+ #include "../native/SSEPlus_native_SSE2.h"
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
++
+ /** @addtogroup supplimental_SSE2
+  *  @{ 
+  *  @name Logical Operations
+@@ -148,4 +153,8 @@ SSP_FORCEINLINE __m128i ssp_srli_epi8_SS
+  *  @}
+  */
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
++
+ #endif // __SSEPLUS_LOGICAL_SSE2_H__
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwJPEG/src/JPEGColor.cpp.orig	2009-07-09 11:15:35.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwJPEG/src/JPEGColor.cpp	2017-04-15 17:58:22.256551161 +0200
+@@ -71,11 +71,18 @@
+ static SYS_INLINE void YCbCrToRGBConv(__m128i &y,__m128i &cb,__m128i &cr)
+ {
+                     __m128i r, g, b;
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
+                     static const __m128i constant = CONST_SET1_32I((S16)(128*64.0));
+                     static const __m128i val90 = CONST_SET1_16I		( (S16)90		);		// R = ( 1.402*2^6 )
+                     static const __m128i val46 = CONST_SET1_16I		( (S16)(-46)	);		// G = ( -.71414*2^6 )
+                     static const __m128i val22 = CONST_SET1_16I		( (S16)(-22)	);		// cr= ( -0.34414*(2^6) )
+                     static const __m128i val113 = CONST_SET1_16I( (S16)(113)	);		// B = ( 1.772*(2^6) )
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
+ 
+ 
+                     // RED
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwJPEG/include/JPEGColorConv.h.orig	2009-07-09 11:15:34.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwJPEG/include/JPEGColorConv.h	2017-04-15 18:10:42.566324738 +0200
+@@ -8,6 +8,11 @@
+ 
+ #include "fe.h"
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
++
+ namespace OPT_LEVEL
+ {
+ SYS_INLINE static void  Mul_16s(__m128i const &s1,__m128i const &s2,__m128i &d1,__m128i &d2)
+@@ -1304,4 +1309,8 @@
+ /////////
+ }
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
++
+ #endif // __JPEGCOLORCONV_H__
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/SSE2Intrinsic.h.orig	2009-07-09 11:15:40.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/SSE2Intrinsic.h	2017-04-15 18:22:32.157931524 +0200
+@@ -309,6 +309,11 @@
+ }
+ 
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
++
+ // these variants don't check for the magnitude to be 0, since if magnitude
+ // is 0, it WILL NOT be less than level (since only gtzero levels are passed into
+ // the LT functions) hence these values will be cleared out anyway
+@@ -348,6 +353,10 @@
+     return        ret.d;
+ }
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
++
+ SYS_INLINE STATIC __m128i _fw_threshval_16sc(const XMM128& complex, const XMM128 &level)
+ {
+     XMM128 ret = complex, rethi, mag, maghi, temp;
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/shuffle.h.orig	2009-07-09 11:15:40.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/common/include/shuffle.h	2017-04-15 18:23:39.564585726 +0200
+@@ -106,6 +106,11 @@
+ // --- </epi16> ---
+ 
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wnarrowing"
++#endif
++
+ // --- <epi8> ---
+ SYS_INLINE STATIC __m128i _mm_rlli_epi8(const __m128i &reg, const  int &by)
+ {
+@@ -140,6 +145,10 @@
+ }
+ // --- </epi8> ---
+ 
++#if defined(__GNUC__) && (__GNUC__ >= 6)
++#pragma GCC diagnostic pop
++#endif
++
+ 
+ } // namespace OPT_LEVEL
+ 
