@@ -341,3 +341,47 @@
  
  } // namespace OPT_LEVEL
  
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/colorModelConversion.h.orig	2009-07-09 11:15:30.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/include/colorModelConversion.h	2019-04-26 17:54:35.318411314 +0200
+@@ -1631,7 +1631,7 @@
+         template <ConvFunc fn, PixelID pid, ProcID prc, MathPattern mp>
+         struct Pixel
+         {
+-            static SYS_INLINE __m128i Process( XMM128 &pX, XMM128 &pY, XMM128 &pZ ) { STATIC_ASSERT(false); }
++            static SYS_INLINE __m128i Process( XMM128 &pX, XMM128 &pY, XMM128 &pZ ) { STATIC_ASSERT(false); return __m128i(); }
+         };
+ 
+         template <ConvFunc fn, PixelID pid, ProcID prc>
+@@ -2177,7 +2177,7 @@
+             static FwStatus ConvertREF( const Fw8u *const pSrc[3], int srcStep, 
+                                          Fw8u *pDst[3],             int dstStep, FwiSize roiSize ) 
+             { 
+-                STATIC_ASSERT(false); 
++                STATIC_ASSERT(false); return FwStatus();
+             }
+         };
+ 
+@@ -2222,7 +2222,7 @@
+             template <pixel_fn pfn>
+             static FwStatus ConvertREF( const Fw8u *pSrc, int srcStep, Fw8u *pDst[3], int dstStep, FwiSize roiSize ) 
+             { 
+-                STATIC_ASSERT(false); 
++                STATIC_ASSERT(false); return FwStatus();
+             }
+         };
+ 
+@@ -2302,12 +2302,12 @@
+             static FwStatus ConvertREF( const Fw8u *const pSrc[3], int srcStep, 
+                                          Fw8u *pDst,                int dstStep, FwiSize roiSize ) 
+             { 
+-                STATIC_ASSERT(false); 
++                STATIC_ASSERT(false); return FwStatus();
+             }
+             static FwStatus ConvertREF( const Fw8u *const pSrc[3], int srcStep[3], 
+                                          Fw8u *pDst,                int dstStep, FwiSize roiSize ) 
+             { 
+-                STATIC_ASSERT(false); 
++                STATIC_ASSERT(false); return FwStatus();
+             }
+         };
+ 
