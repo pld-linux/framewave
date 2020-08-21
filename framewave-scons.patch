@@ -1,0 +1,11 @@
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuild.py.orig	2020-08-16 21:42:10.972877391 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuild.py	2020-08-21 22:07:28.111946704 +0200
+@@ -114,7 +114,7 @@
+         self.oEnv['FWVARS'] = self.dctFwVars  # in case of changes to the internal dictionary
+     	oProject = self.oEnv.SConscript( join( pthProjectDir, sProjectName+'.sconscript' ),\
+                                          src_dir = pthProjectDir,\
+-                                         build_dir = pthBuildDir,\
++                                         variant_dir = pthBuildDir,\
+                                          duplicate = 0 )
+     	if lstDependencies != None:
+     		for dep in lstDependencies:
