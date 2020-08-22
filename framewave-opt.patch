@@ -1,0 +1,14 @@
+--- FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/ResizeShift.cpp.orig	2020-08-21 23:27:33.944259671 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/domain/fwImage/src/ResizeShift.cpp	2020-08-22 08:42:32.082811114 +0200
+@@ -79,6 +79,11 @@
+ 	FwStatus My_FW_ParaCheck<Fw8u>(const Fw8u*pSrc, FwiSize srcSize, int srcStep, FwiRect srcRoi,
+ 		Fw8u*pDst, int dstStep, FwiSize dstRoiSize, int channel);
+ 
++	// explicit instantiation, so implementation code won't be optimized out
++	template
++	FwStatus My_FW_ParaCheck<float>(const float*pSrc, FwiSize srcSize, int srcStep, FwiRect srcRoi,
++		float*pDst, int dstStep, FwiSize dstRoiSize, int channel);
++
+ 	template< class TS, CH chSrc, DispatchType disp >
+ 	extern FwStatus My_FW_Resize(const TS *pSrc, int srcStep, FwiRect srcRoi,	
+ 		TS*pDst, int dstStep, FwiSize dstRoiSize,
