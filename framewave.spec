@@ -19,6 +19,7 @@ Patch4:		%{name}-warnings.patch
 Patch5:		%{name}-cpuid.patch
 Patch6:		%{name}-scons.patch
 Patch7:		%{name}-opt.patch
+Patch8:		gcc11.patch
 URL:		http://framewave.sourceforge.net/
 BuildRequires:	boost-devel >= 1.34
 BuildRequires:	libstdc++-devel
@@ -78,11 +79,12 @@ Statyczne biblioteki Framewave.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # kill precompiled binaries
 %{__rm} BuildTools/bin/FwHeaderConvert_*
 
-%{__sed} -i -e "s/'-O2'/'%{rpmcxxflags}'/" BuildTools/buildscripts/fwflags_gcc.py
+%{__sed} -i -e "s/'-O2'/'%{rpmcxxflags} -std=c++11'/" BuildTools/buildscripts/fwflags_gcc.py
 
 %build
 cd Framewave
