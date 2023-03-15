@@ -9,3 +9,14 @@
                                           duplicate = 0 )
      	if lstDependencies != None:
      		for dep in lstDependencies:
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwutil.py.orig	2023-03-14 18:13:43.493122918 +0100
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwutil.py	2023-03-14 18:15:01.991235213 +0100
+@@ -58,7 +58,7 @@ def setupIncludePaths ( oEnv, pthStartPa
+     else:           lstAllHeaders = (os.path.dirname(f) for f in globtree(join( pthStartPath, "*.h" )))
+ 
+     lstIncludes = []
+-    if oEnv.has_key('CPPPATH'):
++    if 'CPPPATH' in oEnv:
+         if ('#/'+pthStartPath) not in oEnv['CPPPATH']: lstIncludes = ['#/'+pthStartPath]
+     else:
+         oEnv.Append( CPPPATH= ['#/'+pthStartPath])

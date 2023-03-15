@@ -1,0 +1,122 @@
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuild.py.orig	2023-03-14 17:17:16.999765487 +0100
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuild.py	2023-03-14 17:19:47.165472173 +0100
+@@ -46,7 +46,7 @@ class fwBuildRoot:
+ 
+ 
+         if self.dctFwVars['thread'] == 'systemboost':
+-        	self.dctFwVars['thread'] = 'boost_thread-mt'
++            self.dctFwVars['thread'] = 'boost_thread-mt'
+ 
+         # Set correct default wincrt
+         if self.dctFwVars['wincrt'] == '---':
+@@ -91,13 +91,13 @@ class fwBuildRoot:
+         curEnviron = createEnviron()
+         self.oEnv = Environment( CCFLAGS = self.dctFwVars['CCFLAGS'] , toolpath=buildtoolspath, tools=buildtools, ENV=curEnviron, FWVARS=self.dctFwVars )
+ 
+-		# fixup paths back to what they were before scons messed them up [BUGBUG: SCons issue, this is the workaround]
++        # fixup paths back to what they were before scons messed them up [BUGBUG: SCons issue, this is the workaround]
+         if ((sys.platform=='win32') and (self.dctFwVars['bitness']!='32')):
+-			self.oEnv['ENV'] = curEnviron
++            self.oEnv['ENV'] = curEnviron
+ 
+     def subProject(self, sProjectName, lstDependencies = None, altProjectDir = None, libtypeOverride = None):
+-    	if altProjectDir == None: pthProjectDir = join( self.dctFwVars['pthProjectRoot'], sProjectName )
+-    	else:                     pthProjectDir = altProjectDir
++        if altProjectDir == None: pthProjectDir = join( self.dctFwVars['pthProjectRoot'], sProjectName )
++        else:                     pthProjectDir = altProjectDir
+ 
+         libtype = self.dctFwVars['libtype']
+         if libtypeOverride:
+@@ -105,20 +105,20 @@ class fwBuildRoot:
+             self.dctFwVars['libtypeOverride'+sProjectName] = libtypeOverride
+ 
+         pthBuildDir = join( self.dctFwVars['pthScratch'],    \
+-							sProjectName + "_" +              \
+-							self.dctFwVars['variant'] + "_" +\
+-							libtype + "_" +                   \
+-							self.dctFwVars['bitness'] )
++                            sProjectName + "_" +              \
++                            self.dctFwVars['variant'] + "_" +\
++                            libtype + "_" +                   \
++                            self.dctFwVars['bitness'] )
+ 
+         self.dctFwVars[sProjectName+'BuildDir'] = pthBuildDir
+         self.oEnv['FWVARS'] = self.dctFwVars  # in case of changes to the internal dictionary
+-    	oProject = self.oEnv.SConscript( join( pthProjectDir, sProjectName+'.sconscript' ),\
++        oProject = self.oEnv.SConscript( join( pthProjectDir, sProjectName+'.sconscript' ),\
+                                          src_dir = pthProjectDir,\
+                                          variant_dir = pthBuildDir,\
+                                          duplicate = 0 )
+-    	if lstDependencies != None:
+-    		for dep in lstDependencies:
+-    			self.oEnv.Depends( oProject, dep )
++        if lstDependencies != None:
++            for dep in lstDependencies:
++                self.oEnv.Depends( oProject, dep )
+ 
+         return oProject
+ 
+@@ -172,7 +172,7 @@ class fwProject():
+                     PROJECTNAMEU = self.dctFwVars['sProjectName'].upper(), \
+                     BUILDDIR     = self.dctFwVars['pthBuildDir'],\
+                     BITNESS      = self.dctFwVars['bitness'],\
+-					PROJECTDIR   = self.dctFwVars['pthProjectDir'])
++                    PROJECTDIR   = self.dctFwVars['pthProjectDir'])
+ 
+ 
+     def initBuildObjects(self, lstExtraCPPs = None, lstDepends = None, lstDependPaths = None, pthSrcDir=None):
+@@ -260,7 +260,7 @@ class fwProject():
+ 
+         # BUGBUG: <one last hack; can't get rid of this for a bit>
+         if (self.dctFwVars['toolset'] == 'suncc') and (self.dctFwVars['sProjectName'] == 'fwImage'):
+-		pthBuildHFile = appendToFilename(pthBuildHFile, '_sol')
++            pthBuildHFile = appendToFilename(pthBuildHFile, '_sol')
+         # </one last hack>
+ 
+         dctFunctions = constructMultipassCPP( self.dctFwVars['pthProjectDir'],          \
+@@ -365,10 +365,10 @@ def createDefFile ( pthDevLabRoot, pthPr
+     #os.system( sCommandStr )
+ 
+     if win_sys == 0 and isfile(exe_name_path):
+-	os.system('chmod 755 ' + exe_name_path)
++        os.system('chmod 755 ' + exe_name_path)
+ 
+     if isfile(exe_name_path):
+-	os.system( sCommandStr )
++        os.system( sCommandStr )
+ 
+     def_file_path = join(pthProjectRoot,sProjectName,sProjectName + '.def')
+     if win_sys == 0 and isfile(def_file_path) :
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwutil.py.orig	2009-07-09 11:16:55.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwutil.py	2023-03-14 17:45:45.643343147 +0100
+@@ -71,8 +71,8 @@ def setupIncludePaths ( oEnv, pthStartPa
+ 
+ def createEnviron ():
+     # Do any environment modifications here
+-	oEnviron = os.environ
+-	return oEnviron
++    oEnviron = os.environ
++    return oEnviron
+ 
+ def src2obj( pth ):
+     pthRootDir, sRootName = split(pth)
+@@ -84,14 +84,14 @@ def src2obj( pth ):
+ 
+ def buildPath( pthBuildRoot ):
+     return join( pthBuildRoot,\
+-				 ARGUMENTS.get('variant','debug')  + "_" +\
+-				 ARGUMENTS.get('libtype','shared') + "_" +\
+-				 ARGUMENTS.get('bitness','32') )
++                 ARGUMENTS.get('variant','debug')  + "_" +\
++                 ARGUMENTS.get('libtype','shared') + "_" +\
++                 ARGUMENTS.get('bitness','32') )
+ 
+ 
+ def turnOnZi( oEnv ):
+-	import SCons.Util
+-	oEnv['CCPDBFLAGS'] = SCons.Util.CLVar(['${(PDB and "/Gm /ZI /Fd%s" % File(PDB)) or ""}'])
++    import SCons.Util
++    oEnv['CCPDBFLAGS'] = SCons.Util.CLVar(['${(PDB and "/Gm /ZI /Fd%s" % File(PDB)) or ""}'])
+ 
+ def fixLinuxSharedLib( target = None, source = None, env = None ):
+     if target:

@@ -1,0 +1,254 @@
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuild.py.orig	2023-03-14 17:30:38.005654913 +0100
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuild.py	2023-03-14 17:36:21.356773452 +0100
+@@ -7,7 +7,6 @@
+ 
+ import glob
+ import os
+-from string import replace
+ from os.path import *
+ from stat import *
+ import sys
+@@ -56,7 +56,7 @@ class fwBuildRoot:
+         if self.dctFwVars['toolset'] == '---':
+             if   sys.platform=='win32':
+                 self.dctFwVars['toolset'] = 'msvc'
+-            elif sys.platform=='linux2':
++            elif sys.platform.startswith('linux'):
+                 self.dctFwVars['toolset'] = 'gcc'
+             elif sys.platform=='sunos5':
+                 self.dctFwVars['toolset'] = 'suncc'
+@@ -127,7 +127,7 @@ class fwProject():
+         self.dctFwVars                  = self.oEnv['FWVARS']
+ 
+         # First check for a libtype override before any other setup calls
+-        if self.dctFwVars.has_key('libtypeOverride'+sProjectName):
++        if 'libtypeOverride'+sProjectName in self.dctFwVars:
+             self.dctFwVars['libtype'] = self.dctFwVars['libtypeOverride'+sProjectName]
+ 
+         self.dctFwVars['sProjectName']  = sProjectName
+@@ -343,7 +343,7 @@ def createDefFile ( pthDevLabRoot, pthPr
+     if   sys.platform=='win32':
+         exe_name = 'FwHeaderConvert_win.exe'
+         win_sys = 1
+-    elif sys.platform=='linux2':
++    elif sys.platform.startswith('linux'):
+         exe_name = 'FwHeaderConvert_lin'
+     elif sys.platform=='sunos5':
+         exe_name = 'FwHeaderConvert_sol'
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwutil.py.orig	2023-03-14 17:45:45.647654147 +0100
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwutil.py	2023-03-14 17:48:18.679535747 +0100
+@@ -9,7 +9,6 @@ from __future__ import with_statement
+ 
+ import glob
+ import os
+-from string import replace
+ from os.path import *
+ 
+ import sys
+@@ -99,7 +98,7 @@ def fixLinuxSharedLib( target = None, so
+ 
+ def fixMacSharedLib( target = None, source = None, env = None ):
+     if target:
+-        for t in target: os.rename(t.path, replace(t.path,'.dylib','-1.3.1.dylib'))
++        for t in target: os.rename(t.path, t.path.replace('.dylib','-1.3.1.dylib'))
+ 
+ def AddObjsFromLibs( oEnv, LIBS, LIBPATH ):
+     # If no libs exist, nothing needs ot be added
+@@ -127,8 +127,8 @@ def AddObjsFromLibs( oEnv, LIBS, LIBPATH
+             if 'EXTRALIBOBJS' in oEnv['FWVARS']: oEnv['FWVARS']['EXTRALIBOBJS'] += oExtraObjs
+             else: oEnv['FWVARS']['EXTRALIBOBJS'] = oExtraObjs
+         else:
+-            print "Could not find library " + l + ".."
+-            print LIBPATH
++            print("Could not find library " + l + "..")
++            print(LIBPATH)
+             sys.exit(0)
+ 
+ def removeD( s, isD ):
+@@ -164,7 +164,7 @@ def readFile ( sInFile ):
+         with open(sInFile, 'r') as f:
+             data = f.read()
+     except IOError:
+-        print "Could not open " + sInFile  + "!\n"
++        print("Could not open " + sInFile  + "!\n")
+         return None
+     return data
+ 
+@@ -174,7 +174,7 @@ def writeFile ( sOutFile, lstData ):
+             for d in lstData:
+                 f.write( d )
+     except IOError:
+-        print "Could not open " + sOutFile + "!\n"
++        print("Could not open " + sOutFile + "!\n")
+ 
+ def writeLinesToFile ( sOutFile, lstData ):
+     try:
+@@ -182,7 +182,7 @@ def writeLinesToFile ( sOutFile, lstData
+             for d in lstData:
+                 f.write( d + '\n')
+     except IOError:
+-        print "Could not open " + sOutFile + "!\n"
++        print("Could not open " + sOutFile + "!\n")
+ 
+ def getPaths( sInFile ):
+     try:
+@@ -185,11 +185,12 @@ def writeLinesToFile ( sOutFile, lstData
+ 
+ def getPaths( sInFile ):
+     try:
+-        with open(sInFile, 'r') as f:
++        with open(sInFile, 'rb') as f:
+             f.seek(-200, os.SEEK_END)
+             lines = f.readlines()
++            lines = [line.decode("utf-8") for line in lines]
+     except IOError:
+-        print "Could not open " + sInFile  + "!\n"
++        print("Could not open " + sInFile  + "!\n")
+         return None
+ 
+     lstLines = []
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwparse.py.orig	2009-07-09 11:14:21.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwparse.py	2023-03-14 17:32:26.508376552 +0100
+@@ -13,7 +13,6 @@ import re
+ import fileinput
+ 
+ from os.path import *
+-from string import replace
+ from fwutil import *
+ 
+ 
+@@ -89,13 +88,13 @@ def createStub ( sFunctionName, sDecorat
+ def constructMultipassCPP ( pthProjectDir, sProjectName, pthInHeaderFile, pthOutCPPFile, pthVerifyHeader = None ):
+     sHeaderData = readFile( join(pthProjectDir, pthInHeaderFile) )
+     if not sHeaderData:
+-        print "Cannot open " + pthInHeaderFile + "! Exiting.."
++        print("Cannot open " + pthInHeaderFile + "! Exiting..")
+         return None
+ 
+     if pthVerifyHeader:
+         sVerifyData = readFile( pthVerifyHeader )
+         if not pthVerifyHeader:
+-            print "Cannot open " + pthVerifyHeader + "! Exiting.."
++            print("Cannot open " + pthVerifyHeader + "! Exiting..")
+             return None
+ 
+     lstMPFunctions = getMPFuncNames( sHeaderData )
+@@ -140,7 +139,7 @@ def findREinFile ( pthInFile, fname ):
+             if line.find(fname) != -1:
+                 return 1
+     except IOError:
+-        print "Could not open " + pthInFile  + "!\n"
++        print("5,Could not open " + pthInFile  + "!\n")
+         return None
+     return None
+ 
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwObject.py.orig	2009-07-09 11:14:21.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwObject.py	2023-03-14 17:34:22.361075427 +0100
+@@ -7,7 +7,6 @@
+ 
+ import glob
+ import os
+-from string import replace
+ from os.path import *
+ 
+ import sys
+@@ -51,7 +51,7 @@ class fwObject:
+         # Since there is no cross building yet
+         # we can assume that the platform we're
+         # building on is also the target platform
+-        platform = sys.platform
++        platform = sys.platform.replace('linux2', 'linux')
+  
+         # Get toolset name
+         toolset = oFWVARS['toolset']
+@@ -73,7 +73,7 @@ class fwObject:
+         oExceptFlags = None
+         toolset = oEnv['FWVARS']['toolset']
+         # Check if there is any special handling for this object
+-        if dctGlobalExceptionsList.has_key(toolset):
++        if toolset in dctGlobalExceptionsList:
+             for r in dctGlobalExceptionsList[toolset]:
+                 if allInList(r[0], lstBuildFactors):
+                     oExceptFlags = r[1]
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuildexceptions.py.orig	2009-07-09 11:14:21.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuildexceptions.py	2023-03-14 17:38:25.859760232 +0100
+@@ -5,7 +5,6 @@
+ 
+ # Exceptions list module for Framewave's SCons scripts
+ import os
+-from string import replace
+ from os.path import *
+ 
+ import sys
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuildexceptionshandlers.py.orig	2009-07-09 11:14:21.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwbuildexceptionshandlers.py	2023-03-14 17:40:14.403567057 +0100
+@@ -52,7 +52,7 @@ class fwFlags_gcc_AddSubFix(fwFlagsBase)
+         # Select flags to setup based on what kind of
+         # build object are we setting up flags for
+         if sObjectType=='library':
+-            raise exception, "Error: This rule is meant to apply only on object files!"
++            raise Exception("Error: This rule is meant to apply only on object files!")
+         else:
+             self.lstCCFlags = self.determineFlags(lstBuildFactors, dctCCFlags)
+             self.lstCCFlags = self.translateFlags(self.lstCCFlags)
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwLibrary.py.orig	2009-07-09 11:14:21.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwLibrary.py	2023-03-14 17:49:41.047343791 +0100
+@@ -7,7 +7,6 @@
+ 
+ import glob
+ import os
+-from string import replace
+ from os.path import *
+ 
+ import sys
+@@ -45,7 +45,7 @@ class fwLibrary:
+         # Since there is no cross building yet
+         # we can assume that the platform we're
+         # building on is also the target platform
+-        platform = sys.platform
++        platform = sys.platform.replace('linux2', 'linux')
+  
+         # Get toolset name
+         toolset = oFWVARS['toolset']
+@@ -62,7 +62,7 @@ class fwLibrary:
+         oExceptFlags = None
+         toolset = oEnv['FWVARS']['toolset']
+         # Check if there is any special handling for this object
+-        if dctGlobalExceptionsList.has_key(toolset):
++        if toolset in dctGlobalExceptionsList:
+             for r in dctGlobalExceptionsList[toolset]:
+                 if allInList(r[0], lstBuildFactors):
+                     oExceptFlags = r[1]
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/util/FwHeaderConvert/FwHeaderConvert.sconscript.orig	2009-07-09 11:14:25.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/util/FwHeaderConvert/FwHeaderConvert.sconscript	2023-03-14 19:52:26.932017149 +0100
+@@ -17,7 +17,7 @@ from fwbuild import *
+ 
+ if   sys.platform=='win32':
+ 	exe_name = 'FwHeaderConvert_win'
+-elif sys.platform=='linux2':
++elif sys.platform.startswith('linux'):
+ 	exe_name = 'FwHeaderConvert_lin'
+ elif sys.platform=='sunos5':
+ 	exe_name = 'FwHeaderConvert_sol'
+--- FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwflagsbase.py.orig	2009-07-09 11:14:21.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/BuildTools/buildscripts/fwflagsbase.py	2023-03-14 20:02:03.352227746 +0100
+@@ -23,7 +23,7 @@ shr = 'shared'
+ stc = 'static'
+ exe = 'exe'
+ 
+-lin = 'linux2'
++lin = 'linux'
+ win = 'win32'
+ sol = 'sunos5'
+ mac = 'darwin'
+--- FRAMEWAVE_1.3.1_SRC/Framewave/SConstruct.orig	2009-07-09 11:15:44.000000000 +0200
++++ FRAMEWAVE_1.3.1_SRC/Framewave/SConstruct	2023-03-14 21:34:55.725372945 +0100
+@@ -39,7 +39,7 @@ if (str(COMMAND_LINE_TARGETS)=='') or \
+    (COMMAND_LINE_TARGETS==[]) or      \
+    (COMMAND_LINE_TARGETS==['']): chkCommandLine = 1
+ 
+-if ( (sys.platform == 'linux2' or sys.platform == 'sunos5') and ARGUMENTS.get('libtype', 'shared')=='shared'):
++if ( (sys.platform.startswith('linux') or sys.platform == 'sunos5') and ARGUMENTS.get('libtype', 'shared')=='shared'):
+     postAction = fixLinuxSharedLib
+ elif ((sys.platform == 'darwin') and ARGUMENTS.get('libtype', 'shared')=='shared'):
+     postAction = fixMacSharedLib

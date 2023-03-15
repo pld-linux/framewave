@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	static_libs	# don't build static libraries
+%bcond_without	static_libs	# static libraries
 #
 Summary:	Framewave - set of popular image and signal processing routines
 Summary(pl.UTF-8):	Framewave - zestaw popularnych funkcji do przetwarzania obrazu i sygnału
@@ -20,6 +20,8 @@ Patch5:		%{name}-cpuid.patch
 Patch6:		%{name}-scons.patch
 Patch7:		%{name}-opt.patch
 Patch8:		gcc11.patch
+Patch9:		%{name}-python-tabs.patch
+Patch10:	%{name}-python-update.patch
 URL:		http://framewave.sourceforge.net/
 BuildRequires:	boost-devel >= 1.34
 BuildRequires:	libstdc++-devel
@@ -80,6 +82,8 @@ Statyczne biblioteki Framewave.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 # kill precompiled binaries
 %{__rm} BuildTools/bin/FwHeaderConvert_*
